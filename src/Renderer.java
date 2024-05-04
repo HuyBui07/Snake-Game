@@ -14,7 +14,6 @@ public class Renderer extends JPanel {
 
         isGameOver = false;
 
-        setBackground(Color.BLACK);
     }
 
     public void setGameOver(boolean isGameOver) {
@@ -25,17 +24,29 @@ public class Renderer extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        // Draw the game board
+        for (int i = 0; i < getWidth() / Tile.SIZE; i++) {
+            for (int j = 0; j < getHeight() / Tile.SIZE; j++) {
+                if ((i + j) % 2 == 0) {
+                    g.setColor(new Color(167, 209, 61)); // Dark green
+                } else {
+                    g.setColor(new Color(175, 215, 70)); // Light green
+                }
+                g.fillRect(i * Tile.SIZE, j * Tile.SIZE, Tile.SIZE, Tile.SIZE);
+            }
+        }
+
         // Draw the food
         g.setColor(Color.RED);
-        g.fillRect(food.getX() * Tile.SIZE, food.getY() * Tile.SIZE, Tile.SIZE, Tile.SIZE);
+        g.drawImage(food.getImage(), food.getX() * Tile.SIZE, food.getY() * Tile.SIZE, Tile.SIZE, Tile.SIZE, this);
 
         // Draw the snake head
-        g.setColor(Color.GREEN);
+        g.setColor(Color.BLUE);
         g.fillRect(snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE, Tile.SIZE, Tile.SIZE);
 
         // Draw the snake body
         for (Tile bodyPart : snake.getBody()) {
-            g.setColor(Color.GREEN);
+            g.setColor(Color.BLUE);
             g.fillRect(bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE, Tile.SIZE);
         }
 

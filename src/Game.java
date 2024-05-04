@@ -69,6 +69,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         }
 
         if (isGameOver) {
+            renderer.setGameOver(true);
             gameLoop.stop();
         }
 
