@@ -1,3 +1,5 @@
+import javax.swing.ImageIcon;
+import java.awt.Image;
 import java.util.ArrayList;
 
 public class Snake {
@@ -102,5 +104,49 @@ public class Snake {
         }
 
         return false;
+    }
+
+    public Image getImage() {
+        if (velocityX == 1) {
+            return new ImageIcon("src/sprites/head_right.png").getImage();
+        } else if (velocityX == -1) {
+            return new ImageIcon("src/sprites/head_left.png").getImage();
+        } else if (velocityY == 1) {
+            return new ImageIcon("src/sprites/head_down.png").getImage();
+        } else {
+            return new ImageIcon("src/sprites/head_up.png").getImage();
+        }
+    }
+
+    public Image getTailImage() {
+
+        if (body.size() == 1) {
+            Tile lastSegment = body.get(body.size() - 1);
+
+            if (lastSegment.getX() > head.getX()) {
+                return new ImageIcon("src/sprites/tail_right.png").getImage();
+            } else if (lastSegment.getX() < head.getX()) {
+                return new ImageIcon("src/sprites/tail_left.png").getImage();
+            } else if (lastSegment.getY() > head.getY()) {
+                return new ImageIcon("src/sprites/tail_down.png").getImage();
+            } else if (lastSegment.getY() < head.getY()) {
+                return new ImageIcon("src/sprites/tail_up.png").getImage();
+            }
+        }
+
+        Tile lastSegment = body.get(body.size() - 1);
+        Tile secondLastSegment = body.get(body.size() - 2);
+
+        if (lastSegment.getX() > secondLastSegment.getX()) {
+            return new ImageIcon("src/sprites/tail_right.png").getImage();
+        } else if (lastSegment.getX() < secondLastSegment.getX()) {
+            return new ImageIcon("src/sprites/tail_left.png").getImage();
+        } else if (lastSegment.getY() > secondLastSegment.getY()) {
+            return new ImageIcon("src/sprites/tail_down.png").getImage();
+        } else if (lastSegment.getY() < secondLastSegment.getY()) {
+            return new ImageIcon("src/sprites/tail_up.png").getImage();
+        }
+
+        return null;
     }
 }

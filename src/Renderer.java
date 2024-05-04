@@ -2,6 +2,7 @@ import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 
 public class Renderer extends JPanel {
     private Snake snake;
@@ -42,10 +43,23 @@ public class Renderer extends JPanel {
 
         // Draw the snake head
         g.setColor(Color.BLUE);
-        g.fillRect(snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE, Tile.SIZE, Tile.SIZE);
+        g.drawImage(snake.getImage(), snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE, Tile.SIZE,
+                Tile.SIZE, this);
 
         // Draw the snake body
-        for (Tile bodyPart : snake.getBody()) {
+        for (int i = 0; i < snake.getBody().size(); i++) {
+            Tile bodyPart = snake.getBody().get(i);
+
+            if (bodyPart == snake.getHead()) {
+                continue;
+            }
+
+            if (i == snake.getBody().size() - 1) {
+                g.drawImage(snake.getTailImage(), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                        Tile.SIZE, this);
+                continue;
+            }
+
             g.setColor(Color.BLUE);
             g.fillRect(bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE, Tile.SIZE);
         }
