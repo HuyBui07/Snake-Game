@@ -3,11 +3,16 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import javax.swing.ImageIcon;
 
 public class Renderer extends JPanel {
     private Snake snake;
     private Food food;
     private boolean isGameOver;
+
+    // Images
+    private Image headImageUp, headImageDown, headImageLeft, headImageRight, bodyImage, tailImageUp, tailImageDown,
+            tailImageLeft, tailImageRight, foodImage;
 
     public Renderer(Snake snake, Food food) {
         this.snake = snake;
@@ -15,6 +20,17 @@ public class Renderer extends JPanel {
 
         isGameOver = false;
 
+        // Load images
+        headImageUp = new ImageIcon("src/sprites/head_up.png").getImage();
+        headImageDown = new ImageIcon("src/sprites/head_down.png").getImage();
+        headImageLeft = new ImageIcon("src/sprites/head_left.png").getImage();
+        headImageRight = new ImageIcon("src/sprites/head_right.png").getImage();
+        bodyImage = new ImageIcon("src/sprites/body.png").getImage();
+        tailImageUp = new ImageIcon("src/sprites/tail_up.png").getImage();
+        tailImageDown = new ImageIcon("src/sprites/tail_down.png").getImage();
+        tailImageLeft = new ImageIcon("src/sprites/tail_left.png").getImage();
+        tailImageRight = new ImageIcon("src/sprites/tail_right.png").getImage();
+        foodImage = new ImageIcon("src/sprites/apple.png").getImage();
     }
 
     public void setGameOver(boolean isGameOver) {
@@ -39,23 +55,35 @@ public class Renderer extends JPanel {
 
         // Draw the food
         g.setColor(Color.RED);
-        g.drawImage(food.getImage(), food.getX() * Tile.SIZE, food.getY() * Tile.SIZE, Tile.SIZE, Tile.SIZE, this);
+        g.drawImage(foodImage, food.getX() * Tile.SIZE, food.getY() * Tile.SIZE, Tile.SIZE, Tile.SIZE, this);
 
         // Draw the snake head
         g.setColor(Color.BLUE);
-        g.drawImage(snake.getImage(), snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE, Tile.SIZE,
-                Tile.SIZE, this);
+        switch (snake.getHeadDirection()) {
+            case "UP":
+                g.drawImage(headImageUp, snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE,
+                        Tile.SIZE, Tile.SIZE, this);
+                break;
+            case "DOWN":
+                g.drawImage(headImageDown, snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE,
+                        Tile.SIZE, Tile.SIZE, this);
+                break;
+            case "LEFT":
+                g.drawImage(headImageLeft, snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE,
+                        Tile.SIZE, Tile.SIZE, this);
+                break;
+            case "RIGHT":
+                g.drawImage(headImageRight, snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE,
+                        Tile.SIZE, Tile.SIZE, this);
+                break;
+        }
 
         // Draw the snake body
         for (int i = 0; i < snake.getBody().size(); i++) {
             Tile bodyPart = snake.getBody().get(i);
 
-            if (bodyPart == snake.getHead()) {
-                continue;
-            }
-
             if (i == snake.getBody().size() - 1) {
-                g.drawImage(snake.getTailImage(), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                g.drawImage(tailImageDown, bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
                         Tile.SIZE, this);
                 continue;
             }

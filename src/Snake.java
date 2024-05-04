@@ -75,6 +75,19 @@ public class Snake {
         }
     }
 
+    public String getHeadDirection() {
+        if (velocityX == 1) {
+            return "RIGHT";
+        } else if (velocityX == -1) {
+            return "LEFT";
+        } else if (velocityY == 1) {
+            return "DOWN";
+        } else if (velocityY == -1) {
+            return "UP";
+        }
+        return null;
+    }
+
     public void move() {
         this.head = new Tile(head.getX() + velocityX, head.getY() + velocityY);
         for (int i = body.size() - 1; i >= 0; i--) {
@@ -104,18 +117,6 @@ public class Snake {
         }
 
         return false;
-    }
-
-    public Image getImage() {
-        if (velocityX == 1) {
-            return new ImageIcon("src/sprites/head_right.png").getImage();
-        } else if (velocityX == -1) {
-            return new ImageIcon("src/sprites/head_left.png").getImage();
-        } else if (velocityY == 1) {
-            return new ImageIcon("src/sprites/head_down.png").getImage();
-        } else {
-            return new ImageIcon("src/sprites/head_up.png").getImage();
-        }
     }
 
     public Image getTailImage() {
