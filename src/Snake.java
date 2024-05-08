@@ -1,5 +1,3 @@
-import javax.swing.ImageIcon;
-import java.awt.Image;
 import java.util.ArrayList;
 
 public class Snake {
@@ -10,6 +8,7 @@ public class Snake {
     public Snake(Tile head) {
         this.head = head;
         this.body = new ArrayList<Tile>();
+        this.body.add(new Tile(head.getX(), head.getY() - 1)); // Add a body part below the head
         this.velocityX = 0;
         this.velocityY = 1;
     }
@@ -89,17 +88,16 @@ public class Snake {
     }
 
     public String getTailDirection() {
-        if (body.size() < 1) {
-            return null;
-        }
+
         Tile tail = body.get(body.size() - 1);
         Tile beforeTail;
+
         if (body.size() == 1) {
             beforeTail = head;
         } else {
             beforeTail = body.get(body.size() - 2);
         }
-        
+
         if (tail.getX() == beforeTail.getX() && tail.getY() < beforeTail.getY()) {
             return "UP";
         } else if (tail.getX() == beforeTail.getX() && tail.getY() > beforeTail.getY()) {
@@ -110,6 +108,7 @@ public class Snake {
             return "RIGHT";
         }
         return null;
+
     }
 
     public void move() {
@@ -124,7 +123,24 @@ public class Snake {
     }
 
     public void grow() {
-        body.add(new Tile(head.getX(), head.getY()));
+        Tile tail = body.get(body.size() - 1);
+        Tile beforeTail;
+
+        if (body.size() == 1) {
+            beforeTail = head;
+        } else {
+            beforeTail = body.get(body.size() - 2);
+        }
+
+        if (tail.getX() == beforeTail.getX() && tail.getY() < beforeTail.getY()) {
+            body.add(new Tile(tail.getX(), tail.getY() - 1));
+        } else if (tail.getX() == beforeTail.getX() && tail.getY() > beforeTail.getY()) {
+            body.add(new Tile(tail.getX(), tail.getY() + 1));
+        } else if (tail.getX() < beforeTail.getX() && tail.getY() == beforeTail.getY()) {
+            body.add(new Tile(tail.getX() - 1, tail.getY()));
+        } else if (tail.getX() > beforeTail.getX() && tail.getY() == beforeTail.getY()) {
+            body.add(new Tile(tail.getX() + 1, tail.getY()));
+        }
     }
 
     public boolean checkCollision() {
@@ -141,6 +157,14 @@ public class Snake {
         }
 
         return false;
+    }
+
+    public void reset() {
+        head = new Tile(12, 12);
+        body.clear();
+        body.add(new Tile(12, 11));
+        velocityX = 0;
+        velocityY = 1;
     }
 
 }

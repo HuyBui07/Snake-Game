@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Time;
+
 import javax.swing.*;
 import java.util.Random;
 import java.util.Queue;
@@ -18,6 +20,10 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
     // Rendering
     private Renderer renderer;
+
+    // Game state
+    private int level;
+    private int foodEaten;
 
     // Game logic
     Timer gameLoop;
@@ -43,6 +49,10 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         renderer = new Renderer(snake, food);
         add(renderer, BorderLayout.CENTER);
 
+        // Initialize the game state
+        level = 1;
+
+        // Initialize the game loop
         gameLoop = new Timer(100, this);
         gameLoop.start();
 
@@ -65,7 +75,14 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         // Check if the snake has eaten the food
         if (snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()) {
             snake.grow();
-            food.randomizePosition();
+            do {
+                food.randomizePosition();
+            } while (snake.getBody().contains(new Tile(food.getX(), food.getY())));
+            foodEaten++;
+
+            if (foodEaten == level * 10) {
+                levelUp();
+            }
         }
 
         if (isGameOver) {
@@ -75,6 +92,15 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         renderer.repaint();
 
+    }
+
+    private void levelUp() {
+        level++;
+        snake.reset();
+        food.randomizePosition();
+        foodEaten = 0;
+        gameLoop.setDelay(100 - level * 10);
+        gameLoop.start();
     }
 
     @Override

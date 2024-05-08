@@ -167,7 +167,7 @@ public class Renderer extends JPanel {
         } else {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Arial", Font.BOLD, 20));
-            g.drawString("Score: " + snake.getBody().size(), 10, 20);
+            g.drawString("Score: " + (snake.getBody().size() - 1), 10, 20);
         }
     }
 }
