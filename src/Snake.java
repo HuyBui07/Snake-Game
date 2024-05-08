@@ -88,6 +88,30 @@ public class Snake {
         return null;
     }
 
+    public String getTailDirection() {
+        if (body.size() < 1) {
+            return null;
+        }
+        Tile tail = body.get(body.size() - 1);
+        Tile beforeTail;
+        if (body.size() == 1) {
+            beforeTail = head;
+        } else {
+            beforeTail = body.get(body.size() - 2);
+        }
+        
+        if (tail.getX() == beforeTail.getX() && tail.getY() < beforeTail.getY()) {
+            return "UP";
+        } else if (tail.getX() == beforeTail.getX() && tail.getY() > beforeTail.getY()) {
+            return "DOWN";
+        } else if (tail.getX() < beforeTail.getX() && tail.getY() == beforeTail.getY()) {
+            return "LEFT";
+        } else if (tail.getX() > beforeTail.getX() && tail.getY() == beforeTail.getY()) {
+            return "RIGHT";
+        }
+        return null;
+    }
+
     public void move() {
         this.head = new Tile(head.getX() + velocityX, head.getY() + velocityY);
         for (int i = body.size() - 1; i >= 0; i--) {
@@ -119,35 +143,4 @@ public class Snake {
         return false;
     }
 
-    public Image getTailImage() {
-
-        if (body.size() == 1) {
-            Tile lastSegment = body.get(body.size() - 1);
-
-            if (lastSegment.getX() > head.getX()) {
-                return new ImageIcon("src/sprites/tail_right.png").getImage();
-            } else if (lastSegment.getX() < head.getX()) {
-                return new ImageIcon("src/sprites/tail_left.png").getImage();
-            } else if (lastSegment.getY() > head.getY()) {
-                return new ImageIcon("src/sprites/tail_down.png").getImage();
-            } else if (lastSegment.getY() < head.getY()) {
-                return new ImageIcon("src/sprites/tail_up.png").getImage();
-            }
-        }
-
-        Tile lastSegment = body.get(body.size() - 1);
-        Tile secondLastSegment = body.get(body.size() - 2);
-
-        if (lastSegment.getX() > secondLastSegment.getX()) {
-            return new ImageIcon("src/sprites/tail_right.png").getImage();
-        } else if (lastSegment.getX() < secondLastSegment.getX()) {
-            return new ImageIcon("src/sprites/tail_left.png").getImage();
-        } else if (lastSegment.getY() > secondLastSegment.getY()) {
-            return new ImageIcon("src/sprites/tail_down.png").getImage();
-        } else if (lastSegment.getY() < secondLastSegment.getY()) {
-            return new ImageIcon("src/sprites/tail_up.png").getImage();
-        }
-
-        return null;
-    }
 }

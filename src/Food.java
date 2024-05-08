@@ -1,5 +1,3 @@
-import javax.swing.ImageIcon;
-import java.awt.Image;
 
 public class Food extends Tile {
 

@@ -50,7 +50,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+
         if (!keyCodes.isEmpty()) {
             snake.changeDirection(keyCodes.poll());
         }
@@ -87,12 +87,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
-        if ((keyCode == KeyEvent.VK_UP && snake.getVelocityY() != 1) ||
-                (keyCode == KeyEvent.VK_DOWN && snake.getVelocityY() != -1) ||
-                (keyCode == KeyEvent.VK_LEFT && snake.getVelocityX() != 1) ||
-                (keyCode == KeyEvent.VK_RIGHT && snake.getVelocityX() != -1)) {
-            keyCodes.add(keyCode);
-        }
+        keyCodes.add(keyCode);
+
     }
 
     @Override
