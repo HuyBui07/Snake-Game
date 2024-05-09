@@ -9,6 +9,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
     private int boardWidth, boardHeight;
 
+    // Walls
+    private Walls walls;
+
     // Snake and food
     private Snake snake;
     private Food food;
@@ -37,6 +40,13 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         addKeyListener(this);
         setFocusable(true);
 
+        // Initialize the game state
+        level = 1;
+
+        // Initialize the walls
+        walls = new Walls();
+        walls.initializeWalls(level);
+
         // Initialize the snake
         snake = new Snake(new Tile(12, 12));
 
@@ -44,11 +54,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         food = new Food(random.nextInt(24), random.nextInt(24));
 
         // Initialize the renderer
-        renderer = new Renderer(snake, food);
+        renderer = new Renderer(walls, snake, food);
         add(renderer, BorderLayout.CENTER);
-
-        // Initialize the game state
-        level = 1;
 
         // Initialize the game loop
         gameLoop = new Timer(100, this);
@@ -75,11 +82,13 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             snake.grow();
             do {
                 food.randomizePosition();
-            } while (snake.getBody().contains(new Tile(food.getX(), food.getY())));
+            } while (snake.getBody().contains(food)
+                    || walls.getWall().contains(food));
             foodEaten++;
 
             if (foodEaten == level * 10) {
                 levelUp();
+                walls.initializeWalls(level);
             }
         }
 

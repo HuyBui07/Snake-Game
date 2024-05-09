@@ -2,15 +2,15 @@ import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
-import javax.swing.ImageIcon;
 
 public class Renderer extends JPanel {
+    private Walls walls;
     private Snake snake;
     private Food food;
     private boolean isGameOver;
 
-    public Renderer(Snake snake, Food food) {
+    public Renderer(Walls walls, Snake snake, Food food) {
+        this.walls = walls;
         this.snake = snake;
         this.food = food;
 
@@ -37,25 +37,35 @@ public class Renderer extends JPanel {
             }
         }
 
+        // Draw the walls
+        for (Tile wall : walls.getWall()) {
+            g.drawImage(walls.getWallImage(), wall.getX() * Tile.SIZE, wall.getY() * Tile.SIZE, Tile.SIZE, Tile.SIZE,
+                    this);
+        }
+
         // Draw the food
         g.drawImage(food.getFoodImage(), food.getX() * Tile.SIZE, food.getY() * Tile.SIZE, Tile.SIZE, Tile.SIZE, this);
 
         // Draw the snake head
         switch (snake.getHeadDirection()) {
             case "UP":
-                g.drawImage(snake.getImages("HEAD_UP"), snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE,
+                g.drawImage(snake.getImages("HEAD_UP"), snake.getHead().getX() * Tile.SIZE,
+                        snake.getHead().getY() * Tile.SIZE,
                         Tile.SIZE, Tile.SIZE, this);
                 break;
             case "DOWN":
-                g.drawImage(snake.getImages("HEAD_DOWN"), snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE,
+                g.drawImage(snake.getImages("HEAD_DOWN"), snake.getHead().getX() * Tile.SIZE,
+                        snake.getHead().getY() * Tile.SIZE,
                         Tile.SIZE, Tile.SIZE, this);
                 break;
             case "LEFT":
-                g.drawImage(snake.getImages("HEAD_LEFT"), snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE,
+                g.drawImage(snake.getImages("HEAD_LEFT"), snake.getHead().getX() * Tile.SIZE,
+                        snake.getHead().getY() * Tile.SIZE,
                         Tile.SIZE, Tile.SIZE, this);
                 break;
             case "RIGHT":
-                g.drawImage(snake.getImages("HEAD_RIGHT"), snake.getHead().getX() * Tile.SIZE, snake.getHead().getY() * Tile.SIZE,
+                g.drawImage(snake.getImages("HEAD_RIGHT"), snake.getHead().getX() * Tile.SIZE,
+                        snake.getHead().getY() * Tile.SIZE,
                         Tile.SIZE, Tile.SIZE, this);
                 break;
         }
@@ -67,19 +77,23 @@ public class Renderer extends JPanel {
             if (i == snake.getBody().size() - 1) {
                 switch (snake.getTailDirection()) {
                     case "UP":
-                        g.drawImage(snake.getImages("TAIL_UP"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                        g.drawImage(snake.getImages("TAIL_UP"), bodyPart.getX() * Tile.SIZE,
+                                bodyPart.getY() * Tile.SIZE, Tile.SIZE,
                                 Tile.SIZE, this);
                         break;
                     case "DOWN":
-                        g.drawImage(snake.getImages("TAIL_DOWN"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                        g.drawImage(snake.getImages("TAIL_DOWN"), bodyPart.getX() * Tile.SIZE,
+                                bodyPart.getY() * Tile.SIZE, Tile.SIZE,
                                 Tile.SIZE, this);
                         break;
                     case "LEFT":
-                        g.drawImage(snake.getImages("TAIL_LEFT"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                        g.drawImage(snake.getImages("TAIL_LEFT"), bodyPart.getX() * Tile.SIZE,
+                                bodyPart.getY() * Tile.SIZE, Tile.SIZE,
                                 Tile.SIZE, this);
                         break;
                     case "RIGHT":
-                        g.drawImage(snake.getImages("TAIL_RIGHT"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                        g.drawImage(snake.getImages("TAIL_RIGHT"), bodyPart.getX() * Tile.SIZE,
+                                bodyPart.getY() * Tile.SIZE, Tile.SIZE,
                                 Tile.SIZE, this);
                         break;
                 }
@@ -96,38 +110,44 @@ public class Renderer extends JPanel {
             Tile nextBodyPart = snake.getBody().get(i + 1);
 
             if (previousBodyPart.getX() == nextBodyPart.getX()) {
-                g.drawImage(snake.getImages("BODY_VERTICAL"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                g.drawImage(snake.getImages("BODY_VERTICAL"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE,
+                        Tile.SIZE,
                         Tile.SIZE,
                         this);
             } else if (previousBodyPart.getY() == nextBodyPart.getY()) {
-                g.drawImage(snake.getImages("BODY_HORIZONTAL"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                g.drawImage(snake.getImages("BODY_HORIZONTAL"), bodyPart.getX() * Tile.SIZE,
+                        bodyPart.getY() * Tile.SIZE, Tile.SIZE,
                         Tile.SIZE,
                         this);
             } else if ((bodyPart.getX() == previousBodyPart.getX() && bodyPart.getY() > previousBodyPart.getY()
                     && bodyPart.getX() > nextBodyPart.getX() && bodyPart.getY() == nextBodyPart.getY())
                     || (bodyPart.getX() > previousBodyPart.getX() && bodyPart.getY() == previousBodyPart.getY()
                             && bodyPart.getX() == nextBodyPart.getX() && bodyPart.getY() > nextBodyPart.getY())) {
-                g.drawImage(snake.getImages("BODY_TOP_LEFT"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                g.drawImage(snake.getImages("BODY_TOP_LEFT"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE,
+                        Tile.SIZE,
                         Tile.SIZE, this);
             } else if ((bodyPart.getX() == previousBodyPart.getX() && bodyPart.getY() > previousBodyPart.getY()
                     && bodyPart.getX() < nextBodyPart.getX() && bodyPart.getY() == nextBodyPart.getY())
                     || (bodyPart.getX() < previousBodyPart.getX() && bodyPart.getY() == previousBodyPart.getY()
                             && bodyPart.getX() == nextBodyPart.getX() && bodyPart.getY() > nextBodyPart.getY())) {
-                g.drawImage(snake.getImages("BODY_TOP_RIGHT"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                g.drawImage(snake.getImages("BODY_TOP_RIGHT"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE,
+                        Tile.SIZE,
                         Tile.SIZE, this);
             } else if ((bodyPart.getX() == previousBodyPart.getX() && bodyPart.getY() < previousBodyPart.getY()
                     && bodyPart.getX() < nextBodyPart.getX() && bodyPart.getY() == nextBodyPart.getY())
                     || (bodyPart.getX() < previousBodyPart.getX() && bodyPart.getY() == previousBodyPart.getY()
                             && bodyPart.getX() == nextBodyPart.getX() && bodyPart.getY() < nextBodyPart.getY())) {
-                g.drawImage(snake.getImages("BODY_BOTTOM_RIGHT"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                g.drawImage(snake.getImages("BODY_BOTTOM_RIGHT"), bodyPart.getX() * Tile.SIZE,
+                        bodyPart.getY() * Tile.SIZE, Tile.SIZE,
                         Tile.SIZE, this);
             } else if ((bodyPart.getX() == previousBodyPart.getX() && bodyPart.getY() < previousBodyPart.getY()
                     && bodyPart.getX() > nextBodyPart.getX() && bodyPart.getY() == nextBodyPart.getY())
                     || (bodyPart.getX() > previousBodyPart.getX() && bodyPart.getY() == previousBodyPart.getY()
                             && bodyPart.getX() == nextBodyPart.getX() && bodyPart.getY() < nextBodyPart.getY())) {
-                g.drawImage(snake.getImages("BODY_BOTTOM_LEFT"), bodyPart.getX() * Tile.SIZE, bodyPart.getY() * Tile.SIZE, Tile.SIZE,
+                g.drawImage(snake.getImages("BODY_BOTTOM_LEFT"), bodyPart.getX() * Tile.SIZE,
+                        bodyPart.getY() * Tile.SIZE, Tile.SIZE,
                         Tile.SIZE, this);
-            } 
+            }
 
         }
 

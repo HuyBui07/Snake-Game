@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Tile {
     public static final int SIZE = 25;
 
@@ -22,5 +24,22 @@ public class Tile {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Tile tile = (Tile) obj;
+        return x == tile.x && y == tile.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }
