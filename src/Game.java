@@ -1,7 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Time;
-
 import javax.swing.*;
 import java.util.Random;
 import java.util.Queue;

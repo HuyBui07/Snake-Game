@@ -1,9 +1,15 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.ImageIcon;
+import java.awt.Image;
+
 
 public class Snake {
     private Tile head;
     private ArrayList<Tile> body;
     private int velocityX, velocityY;
+    private Map<String, Image> images;
 
     public Snake(Tile head) {
         this.head = head;
@@ -11,6 +17,28 @@ public class Snake {
         this.body.add(new Tile(head.getX(), head.getY() - 1)); // Add a body part below the head
         this.velocityX = 0;
         this.velocityY = 1;
+
+        // Load the images for the snake
+        this.images = new HashMap<String, Image>();
+
+        this.images.put("HEAD_UP", new ImageIcon("src/sprites/head_up.png").getImage());
+        this.images.put("HEAD_DOWN", new ImageIcon("src/sprites/head_down.png").getImage());
+        this.images.put("HEAD_LEFT", new ImageIcon("src/sprites/head_left.png").getImage());
+        this.images.put("HEAD_RIGHT", new ImageIcon("src/sprites/head_right.png").getImage());
+
+        this.images.put("BODY_VERTICAL", new ImageIcon("src/sprites/body_vertical.png").getImage());
+        this.images.put("BODY_HORIZONTAL", new ImageIcon("src/sprites/body_horizontal.png").getImage());
+
+        this.images.put("BODY_TOP_LEFT", new ImageIcon("src/sprites/body_topleft.png").getImage());
+        this.images.put("BODY_TOP_RIGHT", new ImageIcon("src/sprites/body_topright.png").getImage());
+        this.images.put("BODY_BOTTOM_LEFT", new ImageIcon("src/sprites/body_bottomleft.png").getImage());
+        this.images.put("BODY_BOTTOM_RIGHT", new ImageIcon("src/sprites/body_bottomright.png").getImage());
+
+        this.images.put("TAIL_UP", new ImageIcon("src/sprites/tail_up.png").getImage());
+        this.images.put("TAIL_DOWN", new ImageIcon("src/sprites/tail_down.png").getImage());
+        this.images.put("TAIL_LEFT", new ImageIcon("src/sprites/tail_left.png").getImage());
+        this.images.put("TAIL_RIGHT", new ImageIcon("src/sprites/tail_right.png").getImage());
+
     }
 
     public Tile getHead() {
@@ -43,6 +71,10 @@ public class Snake {
 
     public void setVelocityY(int velocityY) {
         this.velocityY = velocityY;
+    }
+
+    public Image getImages(String key) {
+        return images.get(key);
     }
 
     public void changeDirection(int keyCode) {
