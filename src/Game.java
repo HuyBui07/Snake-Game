@@ -42,6 +42,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         // Initialize the game state
         level = 1;
+        isGameOver = false;
 
         // Initialize the walls
         walls = new Walls();
@@ -70,15 +71,24 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             snake.changeDirection(keyCodes.poll());
         }
 
-        snake.move();
-
         // Check if the snake has collided with the walls or itself
         if (snake.checkCollision()) {
             isGameOver = true;
         }
 
+        // Check if the snake has collided with the walls
+        if (walls.getWall().contains(snake.getHead())) {
+            isGameOver = true;
+        }
+
+        // Move the snake
+        if (!isGameOver) {
+            snake.move();
+        }
+
         // Check if the snake has eaten the food
         if (snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()) {
+            SoundManager.playSound("src/sounds/crunch.wav");
             snake.grow();
             do {
                 food.randomizePosition();
