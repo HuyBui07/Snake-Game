@@ -176,7 +176,8 @@ public class Snake {
 
     public boolean checkCollision() {
         // Check if the snake has collided with the walls
-        if (head.getX() < 0 || head.getX() >= 24 || head.getY() < 0 || head.getY() >= 24) {
+        if (head.getX() < 0 || head.getX() >= GameConfig.TILE_NUMBER_X || head.getY() < 0
+                || head.getY() >= GameConfig.TILE_NUMBER_Y) {
             return true;
         }
 

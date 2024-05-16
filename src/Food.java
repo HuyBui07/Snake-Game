@@ -14,8 +14,8 @@ public class Food extends Tile {
     }
 
     public void randomizePosition() {
-        setX((int) (Math.random() * 24));
-        setY((int) (Math.random() * 24));
+        setX((int) (Math.random() * GameConfig.TILE_NUMBER_X));
+        setY((int) (Math.random() * GameConfig.TILE_NUMBER_Y));
     }
 
 }

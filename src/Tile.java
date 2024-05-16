@@ -1,7 +1,6 @@
 import java.util.Objects;
 
 public class Tile {
-    public static final int SIZE = 25;
 
     private int x, y;
 
