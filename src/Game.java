@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.util.Random;
 import java.util.Queue;
 import java.util.LinkedList;
-import java.io.File;
 
 public class Game extends JPanel implements ActionListener, KeyListener {
 
@@ -27,10 +26,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private int level;
     private int foodEaten;
 
-    // Sound files
-    private File crunchSound = new File("src/sounds/crunch.wav");
-
     // Game logic
+    private int normalDelay = 100;
+    private int fastDelay = 40;
     Timer gameLoop;
     boolean isGameOver;
 
@@ -66,7 +64,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         SoundManager.loadSound("src/sounds/crunch.wav");
 
         // Initialize the game loop
-        gameLoop = new Timer(100, this);
+        gameLoop = new Timer(normalDelay, this);
         gameLoop.start();
 
     }
@@ -127,6 +125,17 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         foodEaten = 0;
     }
 
+    private void restart() {
+        level = 1;
+        snake.reset();
+        walls.initializeWalls(level);
+        food.randomizePosition();
+        foodEaten = 0;
+        isGameOver = false;
+        renderer.setGameOver(false);
+        gameLoop.start();
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
         // TODO Auto-generated method stub
@@ -135,16 +144,33 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+
         int keyCode = e.getKeyCode();
 
+        // Add the key code to the queue for movement of the snake
         keyCodes.add(keyCode);
 
+        if (keyCode == KeyEvent.VK_SPACE) {
+            gameLoop.setDelay(fastDelay);
+        }
+
+
+        if (keyCode == KeyEvent.VK_SPACE && isGameOver) {
+            restart();
+        }
+
+        
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
+        
+        int keyCode = e.getKeyCode();
+
+        if (keyCode == KeyEvent.VK_SPACE) {
+            gameLoop.setDelay(100);
+        }
+
     }
 
 }

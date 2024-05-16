@@ -3,8 +3,8 @@ import javax.swing.*;
 public class App {
     public static void main(String[] args) throws Exception {
 
-        int boardWidth = 600;
-        int boardHeight = 600;
+        int boardWidth = 1000;
+        int boardHeight = 800;
 
         JFrame frame = new JFrame("Snake Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
