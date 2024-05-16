@@ -10,9 +10,10 @@ public class App {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
 
-        Game snakeGame = new Game(GameConfig.BOARD_WIDTH, GameConfig.BOARD_HEIGHT);
-        frame.add(snakeGame);
+        GameMenu gameMenu = new GameMenu();
+        frame.add(gameMenu);
         frame.pack();
-        snakeGame.requestFocus();
+        gameMenu.requestFocus();
+        
     }
 }

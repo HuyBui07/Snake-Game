@@ -62,6 +62,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         // Load sound files
         SoundManager.loadSound("src/sounds/crunch.wav");
+        SoundManager.playLowVolumeSound("src/sounds/crunch.wav");
 
         // Initialize the game loop
         gameLoop = new Timer(normalDelay, this);

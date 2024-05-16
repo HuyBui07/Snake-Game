@@ -199,10 +199,7 @@ public class Snake {
         velocityY = 1;
     }
 
-    public boolean contains(Tile tile) {
-        if (head.equals(tile)) {
-            return true;
-        }
+    public boolean contains(Food tile) {
 
         for (Tile bodyTile : body) {
             if (bodyTile.getX() == tile.getX() && bodyTile.getY() == tile.getY()) {

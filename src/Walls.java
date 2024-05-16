@@ -63,7 +63,7 @@ public class Walls {
         }
     }
 
-    public boolean contains(Tile tile) {
+    public boolean contains(Food tile) {
         for (Tile wall : walls) {
             if (wall.getX() == tile.getX() && wall.getY() == tile.getY()){
                 return true;
