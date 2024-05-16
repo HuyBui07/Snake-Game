@@ -4,7 +4,6 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 
-
 public class Snake {
     private Tile head;
     private ArrayList<Tile> body;
@@ -199,4 +198,17 @@ public class Snake {
         velocityY = 1;
     }
 
+    public boolean contains(Tile tile) {
+        if (head.equals(tile)) {
+            return true;
+        }
+
+        for (Tile bodyTile : body) {
+            if (bodyTile.equals(tile)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

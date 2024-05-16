@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.util.Random;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.io.File;
 
 public class Game extends JPanel implements ActionListener, KeyListener {
 
@@ -25,6 +26,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     // Game state
     private int level;
     private int foodEaten;
+
+    // Sound files
+    private File crunchSound = new File("src/sounds/crunch.wav");
 
     // Game logic
     Timer gameLoop;
@@ -49,7 +53,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         walls.initializeWalls(level);
 
         // Initialize the snake
-        snake = new Snake(new Tile(12, 12));
+        snake = new Snake(new Tile(12, 6));
 
         // Initialize the food
         food = new Food(random.nextInt(24), random.nextInt(24));
@@ -57,6 +61,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         // Initialize the renderer
         renderer = new Renderer(walls, snake, food);
         add(renderer, BorderLayout.CENTER);
+
+        // Load sound files
+        SoundManager.loadSound("src/sounds/crunch.wav");
 
         // Initialize the game loop
         gameLoop = new Timer(100, this);
@@ -88,15 +95,17 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         // Check if the snake has eaten the food
         if (snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()) {
-            SoundManager.playSound("src/sounds/crunch.wav");
+            SoundManager.playCrunchSound();
             snake.grow();
-            do {
+
+            food.randomizePosition();
+            if (snake.contains(food) || walls.contains(food)) {
                 food.randomizePosition();
-            } while (snake.getBody().contains(food)
-                    || walls.getWall().contains(food));
+            }
+
             foodEaten++;
 
-            if (foodEaten == level * 10) {
+            if (foodEaten == 10) {
                 levelUp();
                 walls.initializeWalls(level);
             }
@@ -116,8 +125,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         snake.reset();
         food.randomizePosition();
         foodEaten = 0;
-        gameLoop.setDelay(100 - level * 10);
-        gameLoop.start();
     }
 
     @Override

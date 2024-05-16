@@ -28,7 +28,6 @@ public class Walls {
     }
 
     public void initializeWalls(int level) {
-        level = 2;
         walls.clear();
         switch (level) {
             case 2:
@@ -44,5 +43,15 @@ public class Walls {
                 break;
             // Add more cases for more levels...
         }
+    }
+
+    public boolean contains(Tile tile) {
+        for (Tile wall : walls) {
+            if (wall.equals(tile)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
