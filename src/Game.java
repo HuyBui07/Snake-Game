@@ -53,7 +53,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         walls.initializeWalls(level);
 
         // Initialize the snake
-        snake = new Snake(new Tile(12, 6));
+        snake = new Snake(new Tile(1, 0));
 
         // Initialize the food
         food = new Food(random.nextInt(24), random.nextInt(24));

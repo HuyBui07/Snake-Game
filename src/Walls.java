@@ -28,6 +28,7 @@ public class Walls {
     }
 
     public void initializeWalls(int level) {
+        level = 3;
         walls.clear();
         switch (level) {
             case 2:
@@ -41,13 +42,30 @@ public class Walls {
                 }
 
                 break;
+            case 3:
+                // Add walls for level 3
+                for (int i = 0; i <= 13; i++) {
+                    walls.add(new Tile(i, 4));
+                }
+
+                for (int i = 0; i <= 13; i++) {
+                    walls.add(new Tile(i, 11));
+                }
+
+                for (int i = 0; i <= 13; i++) {
+                    walls.add(new Tile(i, 19));
+                }
+
+                break;
+            default:
+                break;
             // Add more cases for more levels...
         }
     }
 
     public boolean contains(Tile tile) {
         for (Tile wall : walls) {
-            if (wall.equals(tile)) {
+            if (wall.getX() == tile.getX() && wall.getY() == tile.getY()){
                 return true;
             }
         }

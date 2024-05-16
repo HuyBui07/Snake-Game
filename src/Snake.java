@@ -13,9 +13,9 @@ public class Snake {
     public Snake(Tile head) {
         this.head = head;
         this.body = new ArrayList<Tile>();
-        this.body.add(new Tile(head.getX(), head.getY() - 1)); // Add a body part below the head
-        this.velocityX = 0;
-        this.velocityY = 1;
+        this.body.add(new Tile(head.getX() - 1, head.getY())); // Add a body part below the head
+        this.velocityX = 1;
+        this.velocityY = 0;
 
         // Load the images for the snake
         this.images = new HashMap<String, Image>();
@@ -204,7 +204,7 @@ public class Snake {
         }
 
         for (Tile bodyTile : body) {
-            if (bodyTile.equals(tile)) {
+            if (bodyTile.getX() == tile.getX() && bodyTile.getY() == tile.getY()) {
                 return true;
             }
         }
