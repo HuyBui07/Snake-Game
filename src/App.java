@@ -1,5 +1,8 @@
 import javax.swing.*;
 
+import config.GameConfig;
+import game.GameMenu;
+
 public class App {
     public static void main(String[] args) throws Exception {
 
