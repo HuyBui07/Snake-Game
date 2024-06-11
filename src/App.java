@@ -14,6 +14,8 @@ public class App {
         int highScore = DatabaseConnection.getHighScore(playerName);
         Player.setHighScore(highScore);
 
+        DatabaseConnection.getLeaderBoard();
+
         JFrame frame = new JFrame("Snake Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(GameConfig.BOARD_WIDTH, GameConfig.BOARD_HEIGHT);

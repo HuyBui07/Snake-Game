@@ -19,9 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import config.GameConfig;
-import utils.DatabaseConnection;
-
-import java.sql.Connection;
+import models.TableData;
 
 public class LeaderBoard extends JPanel implements ActionListener, KeyListener {
 
@@ -41,12 +39,7 @@ public class LeaderBoard extends JPanel implements ActionListener, KeyListener {
         // Initialize table with dummy data
         String[] columnNames = { "Name", "Score" };
 
-        String[][] data = {};
-        try {
-            data = DatabaseConnection.getLeaderBoard();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String[][] data = TableData.getPlayers();
 
         // Create back button
         backButton = new JButton("Back to Menu");

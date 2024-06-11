@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import models.TableData;
+
 public class DatabaseConnection {
     private static final String DATABASE_URL = "jdbc:mysql://localhost:3307/snake";
     private static final String DATABASE_USER = "root";
@@ -24,7 +26,7 @@ public class DatabaseConnection {
         }
     }
 
-    public static String[][] getLeaderBoard() {
+    public static void getLeaderBoard() {
 
         Connection connection = null;
         String query = "SELECT * FROM leaderboard ORDER BY score DESC LIMIT 10";
@@ -41,14 +43,12 @@ public class DatabaseConnection {
                 row[1] = resultSet.getString("score");
                 results.add(row);
             }
-            return results.toArray(new String[0][]);
+            TableData.setPlayers(results.toArray(new String[0][0]));
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection(connection);
         }
-
-        return null;
 
     }
 
