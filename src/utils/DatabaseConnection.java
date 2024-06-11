@@ -2,6 +2,7 @@ package utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -74,4 +75,22 @@ public class DatabaseConnection {
         return 0;
     }
 
+    public static void setScore(String playerName, int score) {
+
+        Connection connection = null;
+        try {
+            connection = getConnection();
+
+            // Insert new row
+            String query = "INSERT INTO leaderboard (playerName, score) VALUES (?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, playerName);
+            preparedStatement.setInt(2, score);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+    }
 }

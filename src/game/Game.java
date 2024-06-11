@@ -7,6 +7,8 @@ import gameObjects.Food;
 import gameObjects.Snake;
 import gameObjects.Tile;
 import gameObjects.Walls;
+import models.Player;
+import utils.DatabaseConnection;
 import utils.SoundManager;
 
 import java.util.Random;
@@ -129,6 +131,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         if (isGameOver) {
             renderer.setGameOver(true);
             gameLoop.stop();
+
+            // Save the score to the database
+            DatabaseConnection.setScore(Player.getName(), foodEaten);    
         }
 
         renderer.repaint();
