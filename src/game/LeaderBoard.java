@@ -1,4 +1,5 @@
 package game;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -42,8 +43,7 @@ public class LeaderBoard extends JPanel implements ActionListener, KeyListener {
 
         String[][] data = {};
         try {
-            Connection connection = DatabaseConnection.getConnection();
-            data = DatabaseConnection.getLeaderBoard(connection);
+            data = DatabaseConnection.getLeaderBoard();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,7 +68,6 @@ public class LeaderBoard extends JPanel implements ActionListener, KeyListener {
 
         add(Box.createVerticalGlue());
         add(backButton);
-        
 
         // Create table
         table = new JTable(data, columnNames);

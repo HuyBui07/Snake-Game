@@ -1,12 +1,16 @@
 package game;
+
 import javax.swing.*;
 
 import config.GameConfig;
+import models.Player;
+import utils.DatabaseConnection;
 
 import java.awt.*;
 import java.awt.event.*;
 
 public class GameMenu extends JPanel {
+    private JLabel highScoreLabel;
     private JLabel titleLabel;
 
     private JButton singlePlayerButton;
@@ -16,6 +20,9 @@ public class GameMenu extends JPanel {
     public GameMenu() {
         setPreferredSize(new Dimension(GameConfig.BOARD_WIDTH, GameConfig.BOARD_HEIGHT));
         setLayout(new GridBagLayout()); // Set layout manager
+
+       // Create high score label
+        highScoreLabel = new JLabel("High Score: " + Player.getHighScore());
 
         // Create title label
         titleLabel = new JLabel("Snake Game");
@@ -92,6 +99,14 @@ public class GameMenu extends JPanel {
         titleConstraints.gridx = 0;
         titleConstraints.gridy = 0;
         titleConstraints.insets = new Insets(0, 0, 20, 0);
+
+        GridBagConstraints highScoreConstraints = new GridBagConstraints();
+        highScoreConstraints.gridx = 0;
+        highScoreConstraints.gridy = 0;
+        highScoreConstraints.insets = new Insets(30, 0, 0, 0);
+
+        // Add high score to panel
+        add(highScoreLabel, highScoreConstraints);
 
         // Add title to panel
         add(titleLabel, titleConstraints);

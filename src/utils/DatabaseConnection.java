@@ -7,9 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-
 public class DatabaseConnection {
-    private static final String DATABASE_URL = "jdbc:mysql://localhost:3307/mydatabase";
+    private static final String DATABASE_URL = "jdbc:mysql://localhost:3307/snake";
     private static final String DATABASE_USER = "root";
     private static final String DATABASE_PASSWORD = "root";
 
@@ -25,11 +24,14 @@ public class DatabaseConnection {
         }
     }
 
-    public static String[][] getLeaderBoard(Connection connection) {
-        
-        // Get leader board data from database
+    public static String[][] getLeaderBoard() {
+
+        Connection connection = null;
         String query = "SELECT * FROM leaderboard ORDER BY score DESC LIMIT 10";
+
+        // Get leader board data from database
         try {
+            connection = getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             ArrayList<String[]> results = new ArrayList<>();
@@ -42,8 +44,34 @@ public class DatabaseConnection {
             return results.toArray(new String[0][]);
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection(connection);
         }
+
         return null;
 
     }
+
+    public static int getHighScore(String name) {
+
+        Connection connection = null;
+        String query = "SELECT score FROM leaderboard WHERE playerName = '" + name + "'";
+
+        // Get high score from database
+        try {
+            connection = getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            if (resultSet.next()) {
+                return resultSet.getInt("score");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+
+        return 0;
+    }
+
 }

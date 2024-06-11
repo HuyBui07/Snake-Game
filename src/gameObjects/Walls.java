@@ -29,7 +29,6 @@ public class Walls {
     }
 
     public void initializeWalls(int level) {
-        level = 3;
         walls.clear();
         switch (level) {
             case 2:
