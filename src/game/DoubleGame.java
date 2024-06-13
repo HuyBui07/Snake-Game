@@ -9,47 +9,66 @@ import gameObjects.Food;
 import gameObjects.Snake;
 import gameObjects.Tile;
 import gameObjects.Walls;
-import models.Player;
-import utils.DatabaseConnection;
+import models.GameState;
 import utils.SoundManager;
 
 import java.util.Random;
 import java.util.Queue;
 import java.util.LinkedList;
 
-public class Game extends JPanel implements ActionListener, KeyListener {
+public class DoubleGame extends JPanel implements ActionListener, KeyListener {
 
-    private int boardWidth = GameConfig.BOARD_WIDTH;
-    private int boardHeight = GameConfig.BOARD_HEIGHT;
+    private int boardWidth = GameConfig.BOARD_WIDTH_DOUBLE;
+    private int boardHeight = GameConfig.BOARD_HEIGHT_DOUBLE;
 
     // Walls
     private Walls walls;
 
     // Snake and food
     private Snake snake;
+    private Snake snake2;
     private Food food;
 
     // Key input
     private Queue<Integer> keyCodes = new LinkedList<Integer>();
+    private Queue<Integer> keyCodes2 = new LinkedList<Integer>();
 
     // Rendering
     private Renderer renderer;
 
     // Game state
     private int level;
-    private int foodEaten;
+    public static GameState gameState = GameState.RUNNING;
+    public static int foodEaten1 = 0;
+    public static int foodEaten2 = 0;
 
     // Game logic
     private int normalDelay = 100;
-    private int fastDelay = 40;
     Timer gameLoop;
     boolean isGameOver;
-    
+    public static int countdown = 60;
+    Timer countdownTimer = new Timer(1000, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            countdown--;
+            if (countdown == 0) {
+                countdownTimer.stop();
+                if (foodEaten1 > foodEaten2) {
+                    gameState = GameState.PLAYER1_WINS;
+                } else if (foodEaten1 < foodEaten2) {
+                    gameState = GameState.PLAYER2_WINS;
+                } else {
+                    gameState = GameState.TIE;
+                }
+                isGameOver = true;
+            }
+        }
+    });
 
     // Game mode
-    private boolean isDoubleMode = false;
+    private boolean isDoubleMode = true;
 
-    Game() {
+    DoubleGame() {
         Random random = new Random();
 
         setPreferredSize(new Dimension(this.boardWidth, this.boardHeight));
@@ -67,6 +86,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         // Initialize the snake
         snake = new Snake(new Tile(1, 0));
+        snake2 = new Snake(new Tile(23, 31));
 
         // Initialize the food
         int foodX = isDoubleMode ? random.nextInt(40) : random.nextInt(24);
@@ -74,7 +94,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         food = new Food(foodX, foodY);
 
         // Initialize the renderer
-        renderer = new Renderer(walls, snake, food);
+        renderer = new Renderer(walls, snake, snake2, food);
         add(renderer, BorderLayout.CENTER);
 
         // Load sound files
@@ -84,29 +104,50 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         // Initialize the game loop
         gameLoop = new Timer(normalDelay, this);
         gameLoop.start();
-
+        countdownTimer.start();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         if (!keyCodes.isEmpty()) {
             snake.changeDirection(keyCodes.poll());
         }
 
-        // Check if the snake has collided with the walls or itself
+        if (!keyCodes2.isEmpty()) {
+            snake2.changeDirection(keyCodes2.poll());
+        }
+
+        // Check if snakes have collided with the walls or itself
         if (snake.checkCollision(isDoubleMode)) {
+            gameState = GameState.PLAYER2_WINS;
+            isGameOver = true;
+        } else if (snake2.checkCollision(isDoubleMode)) {
+            gameState = GameState.PLAYER1_WINS;
             isGameOver = true;
         }
 
-        // Check if the snake has collided with the walls
+        // Check if the snake2 have collided with the walls
         if (walls.getWall().contains(snake.getHead())) {
+            gameState = GameState.PLAYER2_WINS;
+            isGameOver = true;
+        } else if (walls.getWall().contains(snake2.getHead())) {
+            gameState = GameState.PLAYER1_WINS;
             isGameOver = true;
         }
+
+        // Check if the snakes collide with each other
+        if (snake.getHead().getX() == snake2.getHead().getX() && snake.getHead().getY() == snake2.getHead().getY()) {
+            gameState = GameState.TIE;
+            isGameOver = true;
+        }
+
+        snake.collideWithSnake(snake2);
+        snake2.collideWithSnake(snake);
 
         // Move the snake
         if (!isGameOver) {
             snake.move();
+            snake2.move();
         }
 
         // Check if the snake has eaten the food
@@ -119,41 +160,42 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                 food.randomizePosition(isDoubleMode);
             }
 
-            foodEaten++;
+            foodEaten1++;
+        }
 
-            if (foodEaten == 10) {
-                levelUp();
-                walls.initializeWalls(level);
+        if (snake2.getHead().getX() == food.getX() && snake2.getHead().getY() == food.getY()) {
+            SoundManager.playCrunchSound();
+            snake2.grow();
+
+            food.randomizePosition(isDoubleMode);
+            if (snake2.contains(food) || walls.contains(food)) {
+                food.randomizePosition(isDoubleMode);
             }
+
+            foodEaten2++;
         }
 
         if (isGameOver) {
             renderer.setGameOver(true);
             gameLoop.stop();
-
-            // Save the score to the database
-            DatabaseConnection.setScore(Player.getName(), foodEaten);
         }
 
         renderer.repaint();
 
     }
 
-    private void levelUp() {
-        level++;
-        snake.reset();
-        food.randomizePosition(isDoubleMode);
-        foodEaten = 0;
-    }
-
     private void restart() {
         level = 1;
         snake.reset();
+        snake2.reset2();
+        // snake2.resetTest();
         walls.initializeWalls(level);
         food.randomizePosition(isDoubleMode);
-        foodEaten = 0;
+        foodEaten1 = 0;
+        foodEaten2 = 0;
         isGameOver = false;
         renderer.setGameOver(false);
+        countdown = 60;
         gameLoop.start();
     }
 
@@ -168,11 +210,15 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         int keyCode = e.getKeyCode();
 
-        // Add the key code to the queue for movement of the snake
-        keyCodes.add(keyCode);
+        // Add the key code to the queue for movement of snakes
+        if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_A
+                || keyCode == KeyEvent.VK_D) {
+            keyCodes.add(keyCode);
+        }
 
-        if (keyCode == KeyEvent.VK_SPACE) {
-            gameLoop.setDelay(fastDelay);
+        if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_LEFT
+                || keyCode == KeyEvent.VK_RIGHT) {
+            keyCodes2.add(keyCode);
         }
 
         if (keyCode == KeyEvent.VK_SPACE && isGameOver) {
@@ -183,13 +229,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-
-        int keyCode = e.getKeyCode();
-
-        if (keyCode == KeyEvent.VK_SPACE) {
-            gameLoop.setDelay(100);
-        }
-
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }
 
 }

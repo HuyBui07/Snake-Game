@@ -1,4 +1,5 @@
 package gameObjects;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,7 @@ public class Snake {
         // Load the images for the snake
         this.images = new HashMap<String, Image>();
 
+        // Snake 1 images
         this.images.put("HEAD_UP", new ImageIcon("src/sprites/head_up.png").getImage());
         this.images.put("HEAD_DOWN", new ImageIcon("src/sprites/head_down.png").getImage());
         this.images.put("HEAD_LEFT", new ImageIcon("src/sprites/head_left.png").getImage());
@@ -41,6 +43,25 @@ public class Snake {
         this.images.put("TAIL_DOWN", new ImageIcon("src/sprites/tail_down.png").getImage());
         this.images.put("TAIL_LEFT", new ImageIcon("src/sprites/tail_left.png").getImage());
         this.images.put("TAIL_RIGHT", new ImageIcon("src/sprites/tail_right.png").getImage());
+
+        // Snake 2 images
+        this.images.put("HEAD2_UP", new ImageIcon("src/sprites/head2_up.png").getImage());
+        this.images.put("HEAD2_DOWN", new ImageIcon("src/sprites/head2_down.png").getImage());
+        this.images.put("HEAD2_LEFT", new ImageIcon("src/sprites/head2_left.png").getImage());
+        this.images.put("HEAD2_RIGHT", new ImageIcon("src/sprites/head2_right.png").getImage());
+
+        this.images.put("BODY2_VERTICAL", new ImageIcon("src/sprites/body2_vertical.png").getImage());
+        this.images.put("BODY2_HORIZONTAL", new ImageIcon("src/sprites/body2_horizontal.png").getImage());
+
+        this.images.put("BODY2_TOP_LEFT", new ImageIcon("src/sprites/body2_topleft.png").getImage());
+        this.images.put("BODY2_TOP_RIGHT", new ImageIcon("src/sprites/body2_topright.png").getImage());
+        this.images.put("BODY2_BOTTOM_LEFT", new ImageIcon("src/sprites/body2_bottomleft.png").getImage());
+        this.images.put("BODY2_BOTTOM_RIGHT", new ImageIcon("src/sprites/body2_bottomright.png").getImage());
+
+        this.images.put("TAIL2_UP", new ImageIcon("src/sprites/tail2_up.png").getImage());
+        this.images.put("TAIL2_DOWN", new ImageIcon("src/sprites/tail2_down.png").getImage());
+        this.images.put("TAIL2_LEFT", new ImageIcon("src/sprites/tail2_left.png").getImage());
+        this.images.put("TAIL2_RIGHT", new ImageIcon("src/sprites/tail2_right.png").getImage());
 
     }
 
@@ -83,24 +104,28 @@ public class Snake {
     public void changeDirection(int keyCode) {
         switch (keyCode) {
             case 37:
+            case 65:
                 if (velocityX != 1) {
                     velocityX = -1;
                     velocityY = 0;
                 }
                 break;
             case 38:
+            case 87:
                 if (velocityY != 1) {
                     velocityX = 0;
                     velocityY = -1;
                 }
                 break;
             case 39:
+            case 68:
                 if (velocityX != -1) {
                     velocityX = 1;
                     velocityY = 0;
                 }
                 break;
             case 40:
+            case 83:
                 if (velocityY != -1) {
                     velocityX = 0;
                     velocityY = 1;
@@ -198,12 +223,41 @@ public class Snake {
         return false;
     }
 
+    public void collideWithSnake(Snake op) {
+        for (int i = 1; i < body.size(); i++) {
+            Tile breakpoint = body.get(i);
+            if (op.head.getX() == breakpoint.getX() && op.head.getY() == breakpoint.getY()) {
+                body.subList(i, body.size()).clear();
+                break;
+            }
+        }
+    }
+
     public void reset() {
         head = new Tile(12, 12);
         body.clear();
         body.add(new Tile(12, 11));
         velocityX = 0;
         velocityY = 1;
+    }
+
+    public void reset2() {
+        head = new Tile(27, 17);
+        body.clear();
+        body.add(new Tile(27, 18));
+        velocityX = 0;
+        velocityY = -1;
+    }
+
+    public void resetTest() {
+        head = new Tile(27, 17);
+        body.clear();
+        body.add(new Tile(27, 18));
+        body.add(new Tile(27, 19));
+        body.add(new Tile(27, 20));
+        body.add(new Tile(27, 21));
+        velocityX = 0;
+        velocityY = -1;
     }
 
     public boolean contains(Food tile) {

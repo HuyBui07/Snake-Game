@@ -56,7 +56,7 @@ public class DatabaseConnection {
     public static int getHighScore(String name) {
 
         Connection connection = null;
-        String query = "SELECT score FROM leaderboard WHERE playerName = '" + name + "'";
+        String query = "SELECT MAX(score) as maxScore FROM leaderboard WHERE playerName = '" + name + "'";
 
         // Get high score from database
         try {
@@ -64,7 +64,7 @@ public class DatabaseConnection {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             if (resultSet.next()) {
-                return resultSet.getInt("score");
+                return resultSet.getInt("maxScore");
             }
         } catch (SQLException e) {
             e.printStackTrace();

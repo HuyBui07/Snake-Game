@@ -4,7 +4,6 @@ import javax.swing.*;
 
 import config.GameConfig;
 import models.Player;
-import utils.DatabaseConnection;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -46,7 +45,7 @@ public class GameMenu extends JPanel {
         singlePlayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Game snakeGame = new Game(GameConfig.BOARD_WIDTH, GameConfig.BOARD_HEIGHT, false);
+                Game snakeGame = new Game();
 
                 // Switch to game panel
                 JFrame window = (JFrame) SwingUtilities.getWindowAncestor(GameMenu.this);
@@ -61,7 +60,7 @@ public class GameMenu extends JPanel {
         doublePlayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Game snakeGame = new Game(GameConfig.BOARD_WIDTH_DOUBLE, GameConfig.BOARD_HEIGHT_DOUBLE, true);
+                DoubleGame snakeGame = new DoubleGame();
 
                 // Switch to game panel
                 JFrame window = (JFrame) SwingUtilities.getWindowAncestor(GameMenu.this);
