@@ -44,7 +44,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private int fastDelay = 40;
     Timer gameLoop;
     boolean isGameOver;
-    
 
     // Game mode
     private boolean isDoubleMode = false;
@@ -132,7 +131,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             gameLoop.stop();
 
             // Save the score to the database
-            DatabaseConnection.setScore(Player.getName(), foodEaten);
+            DatabaseConnection.setScore(Player.getId(), foodEaten + (level - 1) * 10);
         }
 
         renderer.repaint();
@@ -141,9 +140,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
     private void levelUp() {
         level++;
-        snake.reset();
-        food.randomizePosition(isDoubleMode);
         foodEaten = 0;
+        snake.resetSingle();
+        food.randomizePosition(isDoubleMode);
     }
 
     private void restart() {

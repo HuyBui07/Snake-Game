@@ -1,9 +1,17 @@
 package models;
 
 public class Player {
+    private static int id;
     private static String name;
-    private static String password;
     private static int highScore;
+
+    public static int getId() {
+        return id;
+    }
+
+    public static void setId(int id) {
+        Player.id = id;
+    }
 
     public static String getName() {
         return name;
@@ -11,14 +19,6 @@ public class Player {
 
     public static void setName(String name) {
         Player.name = name;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-
-    public static void setPassword(String password) {
-        Player.password = password;
     }
 
     public static int getHighScore() {

@@ -233,6 +233,14 @@ public class Snake {
         }
     }
 
+    public void resetSingle() {
+        head = new Tile(1, 0);
+        body.clear();
+        body.add(new Tile(0, 0));
+        velocityX = 1;
+        velocityY = 0;
+    }
+
     public void reset() {
         head = new Tile(12, 12);
         body.clear();

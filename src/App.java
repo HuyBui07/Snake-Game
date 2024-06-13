@@ -22,16 +22,52 @@ public class App {
                 "Password:", passwordField
         };
 
-        Object[] options = { "Log in" };
-        int option = JOptionPane.showOptionDialog(null, message, "Snake Game", JOptionPane.DEFAULT_OPTION,
-                JOptionPane.PLAIN_MESSAGE, customIcon, options, options[0]);
-        if (option == 0) {
-            // Log in button was pressed
-            String playerName = playerNameField.getText();
-            String password = new String(passwordField.getPassword());
+        boolean authenticated = false;
+        while (!authenticated) {
+            Object[] options = { "Log in", "Sign up" };
+            int option = JOptionPane.showOptionDialog(null, message, "Snake Game", JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE, customIcon, options, options[0]);
+            System.out.println(option);
+            if (option == 0) {
+                // Log in button was pressed
+                String playerName = playerNameField.getText();
+                String password = new String(passwordField.getPassword());
 
-            int highScore = DatabaseConnection.getHighScore(playerName);
-            Player.setHighScore(highScore);
+                if (!DatabaseConnection.authenticateUser(playerName, password)) {
+                    JOptionPane.showMessageDialog(null, "Invalid player's name or password. Please try again.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    int highScore = DatabaseConnection.getHighScore(Player.getId());
+                    Player.setHighScore(highScore);
+                    authenticated = true;
+                }
+            } else if (option == 1) {
+                // Sign up button was pressed
+                String playerName = playerNameField.getText();
+                String password = new String(passwordField.getPassword());
+                String confirmPassword = new String(passwordField.getPassword());
+
+                if (playerName.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Player's name and password cannot be empty. Please try again.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (!password.equals(confirmPassword)) {
+                    JOptionPane.showMessageDialog(null, "Passwords do not match. Please try again.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else if (DatabaseConnection.checkPlayerName(playerName)) {
+                    JOptionPane.showMessageDialog(null, "Player's name already exists. Please try again.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    DatabaseConnection.addPlayer(playerName, password);
+                    int playerId = DatabaseConnection.getPlayerId(playerName);
+                    Player.setId(playerId);
+                    Player.setName(playerName);
+                    Player.setHighScore(0);
+                    authenticated = true;
+                }
+            } else {
+                // User closed the dialog or clicked on something else
+                System.exit(0);
+            }
         }
 
         DatabaseConnection.getLeaderBoard();

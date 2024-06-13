@@ -1,6 +1,7 @@
 package game;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import config.GameConfig;
 import models.Player;
@@ -20,20 +21,44 @@ public class GameMenu extends JPanel {
         setPreferredSize(new Dimension(GameConfig.BOARD_WIDTH, GameConfig.BOARD_HEIGHT));
         setLayout(new GridBagLayout()); // Set layout manager
 
-       // Create high score label
+        // Set font and color for high score label
+        Font highScoreFont = new Font("Comic Sans MS", Font.BOLD, 24);
+        Color highScoreColor = new Color(0, 204, 0); // Green color
+
+        // Create high score label
         highScoreLabel = new JLabel("High Score: " + Player.getHighScore());
+        highScoreLabel.setFont(highScoreFont);
+        highScoreLabel.setForeground(highScoreColor);
+
+        // Set font and color for title
+        Font titleFont = new Font("Comic Sans MS", Font.BOLD, 40);
+        Color titleColor = new Color(255, 51, 102); // Bright pink color
 
         // Create title label
         titleLabel = new JLabel("Snake Game");
-
-        // Set font and color
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
-        titleLabel.setForeground(Color.BLUE);
+        titleLabel.setFont(titleFont);
+        titleLabel.setForeground(titleColor);
 
         // Create buttons
+        // Set font and color for buttons
+        Font buttonFont = new Font("Comic Sans MS", Font.BOLD, 20);
+        Color buttonColor = new Color(51, 204, 255); // Light blue color
+        Border buttonBorder = BorderFactory.createMatteBorder(2, 2, 2, 2, Color.YELLOW); // Yellow border
+
         singlePlayerButton = new JButton("Single Player");
+        singlePlayerButton.setFont(buttonFont);
+        singlePlayerButton.setBackground(buttonColor);
+        singlePlayerButton.setBorder(buttonBorder);
+
         doublePlayerButton = new JButton("Double Player");
+        doublePlayerButton.setFont(buttonFont);
+        doublePlayerButton.setBackground(buttonColor);
+        doublePlayerButton.setBorder(buttonBorder);
+
         leaderboardButton = new JButton("Leaderboard");
+        leaderboardButton.setFont(buttonFont);
+        leaderboardButton.setBackground(buttonColor);
+        leaderboardButton.setBorder(buttonBorder);
 
         // Set preferred button size
         Dimension buttonSize = new Dimension(200, 50);
@@ -102,7 +127,7 @@ public class GameMenu extends JPanel {
         GridBagConstraints highScoreConstraints = new GridBagConstraints();
         highScoreConstraints.gridx = 0;
         highScoreConstraints.gridy = 0;
-        highScoreConstraints.insets = new Insets(30, 0, 0, 0);
+        highScoreConstraints.insets = new Insets(60, 0, 0, 0);
 
         // Add high score to panel
         add(highScoreLabel, highScoreConstraints);
